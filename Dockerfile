@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # RPCS3 official AppImage (the emulator only — no games, no firmware).
 # Fetched from RPCS3's official binary releases at build time.
 RUN mkdir -p /opt/rpcs3 && \
-    RPCS3_URL="$(curl -s https://api.github.com/RPCS3/rpcs3-binaries-linux/releases/latest \
+    RPCS3_URL="$(curl -fsSL https://api.github.com/repos/RPCS3/rpcs3-binaries-linux/releases/latest \
       | grep -o 'https://[^"]*linux64\.AppImage' | head -1)" && \
     echo "Downloading RPCS3: $RPCS3_URL" && \
     wget -qO /opt/rpcs3/rpcs3.AppImage "$RPCS3_URL" && \
@@ -54,6 +54,6 @@ ENV ROLE=all \
     NVIDIA_DRIVER_CAPABILITIES=all \
     NVIDIA_VISIBLE_DEVICES=all
 
-VOLUME ["/data/games", "/data/firmware"]
+# Attach a Railway Volume at /data for games/firmware persistence.
 EXPOSE 8080
 CMD ["node", "server/server.js"]
